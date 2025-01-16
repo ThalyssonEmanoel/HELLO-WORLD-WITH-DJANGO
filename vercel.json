@@ -1,16 +1,15 @@
 {
-  "version": 2,
   "builds": [
     {
-      "src": "manage.py",
+      "src": "django_hello_world/wsgi.py",
       "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb" }
+      "config": { "maxLambdaSize": "15mb", "runtime":"python3.11.3" }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "manage.py"
+      "dest": "django_hello_world/wsgi.py"
     }
   ]
 }

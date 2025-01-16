@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os #Importante para a configuração de arquivos de "baixo nível" -> estáticos
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-)kdwl+3md@ra+f48p!86k3pj_)u9+ktx#)k1!o5!--ty+cq6bk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -31,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [ #Faz-se necessário colocar o caminho do meu config/coreConfig para que o Django saiba onde está a aplicação
+    'whitenoise.runserver.nostatic',#Ele serve para que o Django saiba que o Whitenoise é o responsável por servir os arquivos estáticos
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +44,7 @@ INSTALLED_APPS = [ #Faz-se necessário colocar o caminho do meu config/coreConfi
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',#Adicionado para que o Whitenoise funcione
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -55,7 +58,7 @@ ROOT_URLCONF = 'django_hello_world.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': ['templates'],  #Necessário para que o Django saiba onde está o diretório de templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -122,3 +125,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATIC_ROOT = os.path.join(BASE_DIR, "public")#Configuração importante para a produção
+STATICFILES_DIRS = [os.path.join(BASE_DIR,"static")]#Configuração importante para a produção
+#Mudar aqui em cima para STATIC_DIRS caso não funcione?
